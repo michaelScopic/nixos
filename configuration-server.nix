@@ -13,6 +13,7 @@
 ## your system.  Help is available in the configuration.nix(5) man page
 ## and in the NixOS manual (accessible by running `nixos-help`).
 
+## Optimized for servers
 
 
 { config, pkgs, ... }:
@@ -78,7 +79,7 @@
   ## Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.michael = {
     isNormalUser = true;
-    extraGroups = [ "sudo" "wheel" "networkmanager" "video" "kvm" ]; ## Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" "video" "kvm" ]; ## Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
@@ -108,71 +109,23 @@
     wget
     curl
     zsh
-    hyprland
-    lightdm
-    waybar
-    dunst
-    libnotify
-    swww
-    kitty
-    rofi-wayland
     neovim
-    lightdm
     neofetch
-    blueman
-    brightnessctl
-    brillo
-    cargo
-    cmake
-    dracula-theme
-    eww-wayland
-    firefox-wayland
-    flameshot
     fzf
     git
     glibc
-    gnome.gnome-keyring
     gnumake
     go 
     gtk3
-    hyprpaper
-    hyprpicker
-    jp2a
     libvirt
-    lxappearance
     meson 
-    mpv
     ninja
-    networkmanagerapplet
-    obs-studio
     pkg-config
-    pipewire
     pavucontrol
     qemu_kvm
-    qt5.qtwayland
-    qt6.qmake
-    qt6.qtwayland
-    scrot
-    shellcheck
-    simplescreenrecorder
-    tldr
     unzip
     virt-viewer
-    wireplumber
-    wlroots
-    xdg-desktop-portal-hyprland
-    xdg-desktop-portal-gtk
     xdg-utils
-    xwayland
-
-    ## Extra settings for Wayland (I think?) and OBS
-    (pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-      })
-    )
-    (pkgs.wrapOBS {
-      plugins = with pkgs.obs-studio-plugins; [ wlrobs ];
-    })
   ];
   
   
@@ -190,26 +143,12 @@
       syntaxHighlighting.enable = true;
       programs.nix-index.enableZshIntegration = true;
     };
-
-    hyprland = { ## Hyprland
-      enable = true;
-      nvidiaPatches = true;
-      xwayland.enable = true;
-    };
-
+    
     tmux = {  ## Tmux
       enable = true;
       clock24 = false;
       plugins = [
         pkgs.tmuxPlugins.nord
-      ];
-    };
-
-    thunar = {  ## Thunar
-      enable = true;
-      plugins = [
-        thunar-archive-plugin 
-        thunar-volman
       ];
     };
 
@@ -223,18 +162,13 @@
       enable = true;
       locate = pkgs.mlocate;
     };
-
   };
 
 
   environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    NIXOS_OZONE_WL = "1";
   };
 
   hardware = {
-    opengl.enable = true;
-    nvidia.modesetting.enable = true;
   };
   
   
@@ -242,9 +176,9 @@
   # services.printing.enable = true;
 
   ## -- Sound --
-  sound.enable = true;
+  #sound.enable = true;
   #hardware.pulseaudio.enable = true;
-  security.rtkit.enable = true;
+  #security.rtkit.enable = true;
   
   ## Enable other daemons
   services = {
@@ -253,55 +187,9 @@
       settings = [
         PermitRootLogin = "no"; ## Security focused users and servers should keep this as "no"
       ];
+     };
     };
 
-    xserver = {
-      enable = true;
-      layout = "us";
-      libinput.enable = true;
-    };
-
-    displayManager.lightdm = {
-      enable = true;
-      autoNumLock = true;
-    };
-
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      jack.enable = true;
-      wireplumber.enable = true;
-    };
-
-    blueman = {
-      enable = true;
-    };
-
-    gnome3.gnome-keyring.enable = true;
-    dbus.enable = true;
-
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ]
-  };
-
-  fonts.fontDir.enable = true;
-  fonts.font = with pkgs; [
-    nerdfonts
-    font-awesome
-    google-fonts
-  ];
-  
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ 
-    pkgs.xdg-desktop-portal-gtk 
-  ];
   #################################
   # === END ENABLING PROGRAMS === #
   #################################
